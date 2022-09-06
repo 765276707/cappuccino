@@ -15,8 +15,6 @@ Cappuccino是一款开源的分布式配置中心，其具有部署简单、接�
 - 对需要对配置进行集中管理的项目
 - 对需要灰度发布场景下的项目集群，等等
 
-#### 系统架构
-![Straws](https://gitee.com/xu_zhibin/straws/raw/master/docs/straws.png)
 
 #### 服务端部署
 ##### 单机部署

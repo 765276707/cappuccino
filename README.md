@@ -1,4 +1,4 @@
-# straws <a href='https://gitee.com/xu_zhibin/cappuccino/stargazers'><img src='https://gitee.com/xu_zhibin/cappuccino/badge/star.svg?theme=white' alt='star'></img></a> <a href='https://gitee.com/xu_zhibin/shield/members'><img src='https://gitee.com/xu_zhibin/shield/badge/fork.svg?theme=dark' alt='fork'></img></a>
+# cappuccino <a href='https://gitee.com/xu_zhibin/cappuccino/stargazers'><img src='https://gitee.com/xu_zhibin/cappuccino/badge/star.svg?theme=white' alt='star'></img></a> <a href='https://gitee.com/xu_zhibin/cappuccino/members'><img src='https://gitee.com/xu_zhibin/cappuccino/badge/fork.svg?theme=dark' alt='fork'></img></a>
 
 #### 介绍
 Cappuccino是一款开源的分布式配置中心，其具有部署简单、接入方便、支持灰度、性能不俗的特性，即可一个Jar包直接单机部署，也支持nignx+server+mysql集群化部署（仅在小规模集群中测试过），也方便开发人员对其进行深度定制化。

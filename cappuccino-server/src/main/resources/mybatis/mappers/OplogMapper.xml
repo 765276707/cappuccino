@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.github.xzb617.cappuccino.server.mapper.OplogMapper">
+  <resultMap id="BaseResultMap" type="com.github.xzb617.cappuccino.server.domain.entity.Oplog">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="req_uri" jdbcType="VARCHAR" property="reqUri" />
+    <result column="op_method" jdbcType="VARCHAR" property="opMethod" />
+    <result column="op_args" jdbcType="VARCHAR" property="opArgs" />
+    <result column="op_desc" jdbcType="VARCHAR" property="opDesc" />
+    <result column="op_time" jdbcType="TIMESTAMP" property="opTime" />
+    <result column="op_user" jdbcType="VARCHAR" property="opUser" />
+  </resultMap>
+
+  <!-- selectList: 查询操作日志列表 -->
+  <select id="selectList" resultMap="BaseResultMap">
+      select id, req_uri, op_method, op_args, op_desc, op_time, op_user from oplog
+      <where>
+          <if test="condition.searchText!=null and condition.searchText!=''">
+            (
+              op_method like concat('%', #{condition.searchText}, '%')
+              or
+              op_desc like concat('%', #{condition.searchText}, '%')
+              or
+              op_user like concat('%', #{condition.searchText}, '%')
+            )
+          </if>
+          <if test="condition.bgnTime!=null">
+            and op_time <![CDATA[>=]]> #{condition.bgnTime}
+          </if>
+          <if test="condition.endTime!=null">
+            and op_time <![CDATA[<=]]> #{condition.endTime}
+          </if>
+      </where>
+  </select>
+
+
+</mapper>

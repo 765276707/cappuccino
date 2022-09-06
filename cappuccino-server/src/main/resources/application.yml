@@ -1,0 +1,55 @@
+# 应用服务 WEB 访问端口
+server:
+  port: 8617
+
+# 应用配置
+spring:
+  application:
+    name: cappuccino-server
+  banner:
+    location: banner/banner.txt
+  jackson:
+    date-format: yyyy-MM-dd HH:mm:ss
+  datasource:
+    type: com.zaxxer.hikari.HikariDataSource
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://127.0.0.1:3306/cappuccino_v3?useUnicode=true&characterEncoding=UTF-8&serverTimezone=GMT%2B8&allowMultiQueries=true
+    username: cappuccino
+    password: ysys1314
+
+
+  # 配置中心的配置
+  cloud:
+    cappuccino:
+      server:
+        # 主机名
+        hostname: http://127.0.0.1
+        # 开启客户端认证
+        client-auth-enabled: true
+        client-access-key: 'client_user_key'
+        client-access-secret: 'client_user_secret'
+        # 前端Token认证的秘钥
+        token-header: 'Authorization'
+        token-secret: '12345678ABCDEFGH'
+        # 集群部署
+        cluster-enabled: false
+#        cluster-heartbeat-interval: 30000
+#        cluster-addr-list:
+#          - http://127.0.0.1:8617
+#          - http://127.0.0.1:8618
+#          - http://127.0.0.1:8619
+
+
+# mybatis
+mybatis:
+  config-location: classpath:mybatis/mybatis-config.xml
+  mapper-locations:
+    - classpath:mybatis/mappers/*.xml
+  type-aliases-package: 'com.github.xzb617.cappuccino.server.domain.entity'
+
+# pagehelper
+pagehelper:
+  reasonable: true
+  support-methods-arguments: true
+  helper-dialect: mysql
+  params: count=countSql

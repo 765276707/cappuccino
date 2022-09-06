@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.github.xzb617.cappuccino.server.mapper.GroupMapper">
+  <resultMap id="BaseResultMap" type="com.github.xzb617.cappuccino.server.domain.entity.Group">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="group_name" jdbcType="VARCHAR" property="groupName" />
+    <result column="group_desc" jdbcType="VARCHAR" property="groupDesc" />
+    <result column="order_num" jdbcType="INTEGER" property="orderNum" />
+    <result column="enable_write" jdbcType="BIT" property="enableWrite" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="create_user" jdbcType="VARCHAR" property="createUser" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+    <result column="update_user" jdbcType="VARCHAR" property="updateUser" />
+  </resultMap>
+
+  <!--
+    countByName: 根据名称查询记录数
+    @Param groupName - 分组名称
+    @Param excludeId - 需要排除的记录编号
+  -->
+  <select id="countByName" resultType="java.lang.Long">
+    select count(id) from cgroup
+    where group_name = #{groupName}
+    <if test="excludeId != null">
+      and id not in (#{excludeId})
+    </if>
+  </select>
+
+  <!--
+    selectList: 查询分组列表
+    @Param condition 查询条件
+  -->
+  <select id="selectList" resultMap="BaseResultMap">
+    select id, group_name, group_desc, order_num, enable_write,
+        create_time, create_user, update_time, update_user from cgroup
+    <if test="condition != null">
+      <where>
+        <if test="condition.searchText!=null and condition.searchText!=''">
+          group_name like concat('%', #{condition.searchText}, '%')
+          or
+          group_desc like concat('%', #{condition.searchText}, '%')
+        </if>
+      </where>
+    </if>
+    order by order_num asc
+  </select>
+
+</mapper>

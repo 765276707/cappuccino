@@ -1,0 +1,5 @@
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+com.github.xzb617.cappuccino.client.CappuccinoCloudConfigClientAutoConfiguration
+
+org.springframework.boot.env.EnvironmentPostProcessor=\
+com.github.xzb617.cappuccino.client.spring.CappuccinoConfigEnvironmentPostProcessor

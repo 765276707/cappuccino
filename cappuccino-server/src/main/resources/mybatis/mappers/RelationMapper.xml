@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.github.xzb617.cappuccino.server.mapper.RelationMapper">
+  <resultMap id="BaseResultMap" type="com.github.xzb617.cappuccino.server.domain.entity.Relation">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="user_id" jdbcType="BIGINT" property="userId" />
+    <result column="resource_id" jdbcType="BIGINT" property="resourceId" />
+    <result column="resource_type" jdbcType="VARCHAR" property="resourceType" />
+  </resultMap>
+
+  <delete id="deleteByResource">
+    delete from relation
+    <where>
+      resource_id = #{resourceId}
+      and
+      resource_type = #{resourceType}
+    </where>
+  </delete>
+
+  <select id="countBy" resultType="java.lang.Long">
+    select count(*) from relation
+    <where>
+      user_id = #{userId}
+      and
+      resource_id = #{resourceId}
+      and
+      resource_type = #{resourceType}
+    </where>
+  </select>
+
+  <select id="selectUserIdsByResource" resultType="java.lang.Long">
+    select user_id from relation
+    <where>
+      resource_id = #{resourceId}
+      and
+      resource_type = #{resourceType}
+    </where>
+  </select>
+
+</mapper>

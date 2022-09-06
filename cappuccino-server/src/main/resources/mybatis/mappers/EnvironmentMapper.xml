@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.github.xzb617.cappuccino.server.mapper.EnvironmentMapper">
+  <resultMap id="BaseResultMap" type="com.github.xzb617.cappuccino.server.domain.entity.Environment">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="env_name" jdbcType="VARCHAR" property="envName" />
+    <result column="env_desc" jdbcType="VARCHAR" property="envDesc" />
+    <result column="order_num" jdbcType="INTEGER" property="orderNum" />
+  </resultMap>
+
+  <!--
+    selectList: 查询环境列表
+    @Param excludeId 要排除的编号
+  -->
+  <select id="selectList" resultMap="BaseResultMap">
+    select id, env_name, env_desc, order_num from environment
+    <if test="excludeId != null">
+      where id not in (#{excludeId})
+    </if>
+    order by order_num asc
+  </select>
+
+</mapper>

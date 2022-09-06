@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.github.xzb617.cappuccino.server.mapper.ConfigMapper">
+  <resultMap id="BaseResultMap" type="com.github.xzb617.cappuccino.server.domain.entity.Config">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="client_id" jdbcType="BIGINT" property="clientId" />
+    <result column="description" jdbcType="VARCHAR" property="description" />
+    <result column="file_extension" jdbcType="VARCHAR" property="fileExtension" />
+    <result column="sign" jdbcType="VARCHAR" property="sign" />
+    <result column="version" jdbcType="INTEGER" property="version" />
+    <result column="release_time" jdbcType="TIMESTAMP" property="releaseTime" />
+    <result column="release_user" jdbcType="VARCHAR" property="releaseUser" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="create_user" jdbcType="VARCHAR" property="createUser" />
+    <result column="content" jdbcType="LONGVARCHAR" property="content" />
+  </resultMap>
+
+  <select id="selectByClientId" resultMap="BaseResultMap">
+    select * from config where client_id = #{clientId}
+  </select>
+
+</mapper>

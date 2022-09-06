@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.github.xzb617.cappuccino.server.mapper.AuditlogMapper">
+  <resultMap id="BaseResultMap" type="com.github.xzb617.cappuccino.server.domain.entity.Auditlog">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="op_client_id" jdbcType="BIGINT" property="opClientId" />
+    <result column="config_type" jdbcType="INTEGER" property="configType" />
+    <result column="op_type" jdbcType="VARCHAR" property="opType" />
+    <result column="op_desc" jdbcType="VARCHAR" property="opDesc" />
+    <result column="op_time" jdbcType="TIMESTAMP" property="opTime" />
+    <result column="op_user" jdbcType="VARCHAR" property="opUser" />
+    <result column="color" jdbcType="VARCHAR" property="color" />
+  </resultMap>
+
+  <select id="selectList" resultType="com.github.xzb617.cappuccino.server.domain.vo.AuditlogVO">
+    select al.id, al.op_client_id, al.config_type, al.op_type, al.op_desc, al.op_time, al.op_user, al.color,
+        cli.id as client_id,
+        cli.client_name,
+        gp.group_name,
+        env.env_name
+    from auditlog al
+    left join clients cli on al.op_client_id = cli.id
+    left join cgroup gp on cli.group_id = gp.id
+    left join environment env on cli.env_id = env.id
+    <where>
+      <if test="condition.searchText!=null and condition.searchText!=''">
+        (
+        al.op_desc like concat('%', #{condition.searchText}, '%')
+        or
+        al.op_user like concat('%', #{condition.searchText}, '%')
+        )
+      </if>
+      <if test="condition.opType!=null and condition.opType!=''">
+        and al.op_type = #{condition.opType}
+      </if>
+      <if test="condition.bgnTime!=null">
+        and al.op_time <![CDATA[>=]]> #{condition.bgnTime}
+      </if>
+      <if test="condition.endTime!=null">
+        and al.op_time <![CDATA[<=]]> #{condition.endTime}
+      </if>
+      <if test="condition.envId!=null">
+        and cli.env_id = #{condition.envId}
+      </if>
+      <if test="condition.groupId!=null">
+        and cli.group_id = #{condition.groupId}
+      </if>
+    </where>
+    order by al.op_time desc
+  </select>
+
+  <select id="selectRecentlyList" resultMap="BaseResultMap">
+    select al.id, al.op_client_id, al.config_type, al.op_type, al.op_desc, al.op_time, al.op_user, al.color
+    from auditlog al
+    where al.op_client_id = #{clientId}
+    order by al.op_time desc
+    limit #{size}
+  </select>
+</mapper>

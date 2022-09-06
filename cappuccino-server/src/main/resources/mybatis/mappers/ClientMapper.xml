@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.github.xzb617.cappuccino.server.mapper.ClientMapper">
+  <resultMap id="BaseResultMap" type="com.github.xzb617.cappuccino.server.domain.entity.Client">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="client_name" jdbcType="VARCHAR" property="clientName" />
+    <result column="client_desc" jdbcType="VARCHAR" property="clientDesc" />
+    <result column="env_id" jdbcType="BIGINT" property="envId" />
+    <result column="env_name" jdbcType="VARCHAR" property="envName" />
+    <result column="group_id" jdbcType="BIGINT" property="groupId" />
+    <result column="group_name" jdbcType="VARCHAR" property="groupName" />
+    <result column="charger" jdbcType="VARCHAR" property="charger" />
+    <result column="charger_phone_number" jdbcType="VARCHAR" property="chargerPhoneNumber" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="create_user" jdbcType="VARCHAR" property="createUser" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+    <result column="update_user" jdbcType="VARCHAR" property="updateUser" />
+  </resultMap>
+
+  <sql id="BASE_QUERY_SQL">
+    select
+        cl.id,
+        cl.client_name,
+        cl.client_desc,
+        cl.group_id,
+        g.group_name as group_name,
+        cl.env_id,
+        e.env_name as env_name,
+        charger,
+        charger_phone_number,
+        cl.create_time, cl.create_user, cl.update_time, cl.update_user
+    from clients cl
+    left join cgroup g on cl.group_id = g.id
+    left join environment e on cl.env_id = e.id
+  </sql>
+
+  <select id="selectById" resultMap="BaseResultMap">
+      <include refid="BASE_QUERY_SQL" />
+      where cl.id = #{id}
+  </select>
+
+    <select id="selectByMeta" resultMap="BaseResultMap">
+        <include refid="BASE_QUERY_SQL" />
+        where
+            e.env_name = #{meta.env}
+            and
+            g.group_name = #{meta.group}
+            and
+            cl.client_name = #{meta.name}
+    </select>
+
+  <select id="selectList" resultMap="BaseResultMap">
+    <include refid="BASE_QUERY_SQL" />
+    <if test="userId != null">
+        left join relation r on r.resource_id = cl.id and r.resource_type = 'c'
+    </if>
+    <where>
+      <if test="userId != null">
+        and r.user_id = #{userId}
+      </if>
+      <if test="condition.envId != null">
+        and cl.env_id = #{condition.envId}
+      </if>
+      <if test="condition.groupId != null">
+        and cl.group_id = #{condition.groupId}
+      </if>
+      <if test="condition.searchText!=null and condition.searchText!=''">
+        and (
+        cl.client_name like concat('%', #{condition.searchText}, '%')
+        or
+        cl.client_desc like concat('%', #{condition.searchText}, '%')
+        or
+        cl.charger like concat('%', #{condition.searchText}, '%')
+        )
+      </if>
+    </where>
+  </select>
+
+  <select id="countBy" resultType="java.lang.Long">
+    select count(*) from clients
+    <where>
+        client_name = #{clientName}
+        and
+        env_id = #{envId}
+        and
+        group_id = #{groupId}
+        <if test="excludeId != null">
+          and id <![CDATA[ <> ]]> #{excludeId}
+        </if>
+    </where>
+  </select>
+
+    <select id="selectByGroupId" resultMap="BaseResultMap">
+        <include refid="BASE_QUERY_SQL" />
+        where
+        cl.group_id = #{groupId}
+    </select>
+
+</mapper>

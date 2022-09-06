@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.github.xzb617.cappuccino.server.mapper.UserMapper">
+  <resultMap id="BaseResultMap" type="com.github.xzb617.cappuccino.server.domain.entity.User">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="username" jdbcType="VARCHAR" property="username" />
+    <result column="password" jdbcType="VARCHAR" property="password" />
+    <result column="salt" jdbcType="VARCHAR" property="salt" />
+    <result column="realname" jdbcType="VARCHAR" property="realname" />
+    <result column="phone_number" jdbcType="VARCHAR" property="phoneNumber" />
+    <result column="email" jdbcType="VARCHAR" property="email" />
+    <result column="dept_name" jdbcType="VARCHAR" property="deptName" />
+    <result column="job_name" jdbcType="VARCHAR" property="jobName" />
+    <result column="role" jdbcType="VARCHAR" property="role" />
+    <result column="enable_write" jdbcType="BIT" property="enableWrite" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="create_user" jdbcType="VARCHAR" property="createUser" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+    <result column="update_user" jdbcType="VARCHAR" property="updateUser" />
+  </resultMap>
+
+  <!--
+    BaseColumns: 列名
+  -->
+  <sql id="BaseColumns">
+    id, username, password, realname, phone_number, email, dept_name, job_name,
+    role, enable_write, create_time, create_user, update_time, update_user
+  </sql>
+
+  <!--
+    countByUsername: 根据用户名称查询记录数
+    @Param username - 用户名
+  -->
+  <select id="countByUsername" resultType="java.lang.Long">
+    select count(id) from users
+    where username = #{username}
+  </select>
+
+
+  <!--
+    countByPhoneNumber: 根据手机号称查询记录数
+    @Param phoneNumber - 手机号
+  -->
+  <select id="countByPhoneNumber" resultType="java.lang.Long">
+    select count(id) from users
+    where phone_number = #{phoneNumber}
+  </select>
+
+
+  <!--
+    selectByUsername: 根据用户名称查询记录
+    @Param username - 用户名
+  -->
+  <select id="selectByUsername" resultMap="BaseResultMap">
+    select
+        <include refid="BaseColumns" />, salt
+    from users
+    where username = #{username}
+  </select>
+
+
+  <!--
+    selectList: 查询分组列表
+    @Param condition 查询条件
+  -->
+  <select id="selectList" resultMap="BaseResultMap">
+    select
+    <include refid="BaseColumns" />
+    from users
+    <if test="condition != null">
+      <where>
+        <if test="condition.searchText!=null and condition.searchText!=''">
+          username like concat('%', #{condition.searchText}, '%')
+          or
+          realname like concat('%', #{condition.searchText}, '%')
+          or
+          phone_number like concat('%', #{condition.searchText}, '%')
+          or
+          dept_name like concat('%', #{condition.searchText}, '%')
+          or
+          job_name like concat('%', #{condition.searchText}, '%')
+        </if>
+        <if test="condition.role!=null and condition.role!=''">
+          role = #{condition.role}
+        </if>
+      </where>
+    </if>
+    order by create_time desc
+  </select>
+
+  <delete id="deleteByIds">
+    <if test="ids!=null and ids.size()&gt;0">
+      delete from users where id in
+      <foreach close=")" collection="ids" index="index" item="id" open="(" separator=",">
+        #{id}
+      </foreach>
+    </if>
+  </delete>
+
+</mapper>

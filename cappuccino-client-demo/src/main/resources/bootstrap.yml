@@ -1,0 +1,18 @@
+server:
+  port: 8081
+spring:
+  application:
+    name: cappuccino-client-demo
+
+  # 配置中心客户端的配置
+  cloud:
+    cappuccino:
+      client:
+        # 集群示例： http://127.0.0.1:8617&wgt=8,http://127.0.0.1:8618&wgt=1,http://127.0.0.1:8619&wgt=1
+        server-addr: http://127.0.0.1:8617
+        load-balance-strategy: round_robin
+        # 是否开启自动刷新配置
+        refresh-enabled: true
+        # 配置中心开启了对客户端的认证时，所需的配置
+        access-key: 'client_user_key'
+        access-secret: 'client_user_secret'
